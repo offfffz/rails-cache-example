@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  caller-service:
+    build: ./caller-service
+    volumes:
+      - ./caller-service:/var/app
+    depends_on:
+      - redis-host
+      - yearbook
+    command: bundle exec rails server -b 0.0.0.0
+  yearbook:
+    build: ./yearbook
+    volumes:
+      - ./yearbook:/var/app
+    depends_on:
+      - db
+    environment:
+      - DB_USERNAME=postgres
+    command: bundle exec rails server -p 8080 -b 0.0.0.0
+  db:
+    image: postgres
+  redis-host:
+    image: redis
