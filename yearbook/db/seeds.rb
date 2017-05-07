@@ -33,3 +33,11 @@ Student.find_or_create_by(
   graduation_year: 2016,
   major: eng
 )
+
+Student.find_or_create_by(
+  name: 'Pitipat Arunroong',
+  phone_number: '0996666666',
+  age: 19,
+  graduation_year: 2015,
+  major: eng
+)
