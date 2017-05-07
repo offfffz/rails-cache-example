@@ -10,6 +10,6 @@ class Api::MajorResource < JSONAPI::Resource
   has_many :students
 
   def students
-    render @model.students.as_json
+    @model.students.as_json
   end
 end
