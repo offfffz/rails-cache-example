@@ -1,24 +1,51 @@
 version: '2'
 
 services:
-  caller-service:
+  caller-service-a:
     build: ./caller-service
     volumes:
       - ./caller-service:/var/app
     depends_on:
-      - redis-host
+      - caller-service-redis
       - yearbook
-    command: bundle exec rails server -b 0.0.0.0
+    environment:
+      - YEARBOOK_API=http://yearbook:3000/api
+      - REDIS_HOST=caller-service-redis
+    command: bundle exec rails server -p 3000 -b 0.0.0.0 -P tmp/pids/caller-service-a.pid
+  caller-service-b:
+    build: ./caller-service
+    volumes:
+      - ./caller-service:/var/app
+    depends_on:
+      - caller-service-redis
+      - yearbook
+    environment:
+      - YEARBOOK_API=http://yearbook:3000/api
+      - REDIS_HOST=caller-service-redis
+    command: bundle exec rails server -p 3000 -b 0.0.0.0 -P tmp/pids/caller-service-b.pid
+  caller-service-redis:
+    image: redis
+  caller-service-load-balancer:
+    image: nginx:alpine
+    depends_on:
+      - caller-service-a
+      - caller-service-b
+    volumes:
+      - .nginx:/etc/nginx
+    ports:
+      - 3000:80
+
   yearbook:
     build: ./yearbook
     volumes:
       - ./yearbook:/var/app
     depends_on:
-      - db
+      - yearbook-db
     environment:
       - DB_USERNAME=postgres
-    command: bundle exec rails server -p 8080 -b 0.0.0.0
-  db:
+      - DB_HOST=yearbook-db
+    command: bundle exec rails server -p 3000 -b 0.0.0.0
+    ports:
+      - 3100:3000
+  yearbook-db:
     image: postgres
-  redis-host:
-    image: redis
