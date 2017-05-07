@@ -1,3 +1,3 @@
 class Student
-  include Her::Model
+  include Her::JsonApi::Model
 end

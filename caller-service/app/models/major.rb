@@ -1,3 +1,5 @@
 class Major
-  include Her::Model
+  include Her::JsonApi::Model
+
+  has_many :students
 end
