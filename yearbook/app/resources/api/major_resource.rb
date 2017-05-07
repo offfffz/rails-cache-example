@@ -6,10 +6,10 @@ class Api::MajorResource < JSONAPI::Resource
   # Clear cache when its value change
   cache_field :updated_at
 
-  attributes :name, :created_at, :updated_at
+  attributes :name, :created_at, :updated_at, :students
+  has_many :students
 
-  attribute :students
   def students
-    @model.students.as_json
+    render @model.students.as_json
   end
 end
