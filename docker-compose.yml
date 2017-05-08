@@ -44,8 +44,11 @@ services:
     environment:
       - DB_USERNAME=postgres
       - DB_HOST=yearbook-db
+      - REDIS_HOST=yearbook-redis
     command: bundle exec rails server -p 3000 -b 0.0.0.0
     ports:
       - 3100:3000
+  yearbook-redis:
+    image: redis
   yearbook-db:
     image: postgres

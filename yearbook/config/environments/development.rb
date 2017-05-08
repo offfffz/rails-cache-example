@@ -17,7 +17,10 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
 
     # config.cache_store = :memory_store
-    config.cache_store = :file_store, "tmp/cache/"
+    # config.cache_store = :file_store, "tmp/cache/"
+    config.cache_store = :redis_store,
+      "redis://#{ENV.fetch('REDIS_HOST')}:6379/0/cache",
+      { expires_in: 90.minutes }
     config.public_file_server.headers = {
       'Cache-Control' => 'public, max-age=172800'
     }

@@ -1,1 +1,9 @@
 <h1>Students</h1>
+
+<% cache [@students], expires: 10.minute do %>
+  <% @students.each do |student| %>
+    <h2>
+      <%= student.name %>
+    </h2>
+  <% end %>
+<% end %>
